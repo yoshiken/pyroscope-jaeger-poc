@@ -104,7 +104,8 @@ func main() {
 	e := echo.New()
 	e.Use(otelecho.Middleware("svc2"))
 	e.GET("/greeting", func(c echo.Context) error {
-		_, span := tracer.Start(c.Request().Context(), "handler")
+		ctx := c.Request().Context()
+		span := trace.SpanFromContext(otel.GetTextMapPropagator().Extract(ctx, propagation.HeaderCarrier(c.Request().Header)))
 
 		callGhOrgs(c.Request().Context())
 		defer span.End()
