@@ -14,6 +14,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"log"
 	"net/http"
+	"github.com/sirupsen/logrus"
 )
 
 var tracer trace.Tracer
@@ -73,6 +74,13 @@ func main() {
 		if err != nil {
 			return err
 		}
+
+		logger := logrus.New()
+		spanCtx := trace.SpanContextFromContext(ctx)
+		logger.Info("looking for nearest vehicle")
+		logger.Info("trace_id: " + spanCtx.TraceID().String())
+		logger.Info("span_id: " + spanCtx.SpanID().String())
+
 		return c.String(http.StatusOK, string(resp.Body()))
 	})
 	e.Logger.Fatal(e.Start(":1323"))

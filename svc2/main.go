@@ -41,7 +41,6 @@ func primeNumber(ctx context.Context) {
 	defer span.End()
 	for i := 2; i < 100000; i++ {
 		if isPrime(i) {
-			fmt.Printf("%v is prime\n", i)
 		}
 	}
 }
